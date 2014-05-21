@@ -1,0 +1,7 @@
+base   c3chart
+author Jason Xun Xu
+email  dev@jasonxu.net
+date   2014-05-20
+name   c3chart plugin
+desc   Inserts charts rendered by C3.js.
+url    http://jasonxu.net/projects/dokuwiki/c3chart
