@@ -35,6 +35,11 @@ class action_plugin_c3chart extends DokuWiki_Action_Plugin {
     public function handle_tpl_metaheader_output(Doku_Event &$event, $param) {
         $event->data["script"][] = array (
             "type" => "text/javascript",
+            "src" => "//cdnjs.cloudflare.com/ajax/libs/js-yaml/3.0.2/js-yaml.min.js",
+            "_data" => "",
+        );
+        $event->data["script"][] = array (
+            "type" => "text/javascript",
             "src" => "//cdnjs.cloudflare.com/ajax/libs/d3/3.4.8/d3.min.js",
             "_data" => "",
         );

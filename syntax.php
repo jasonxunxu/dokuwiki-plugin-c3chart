@@ -55,7 +55,7 @@ class syntax_plugin_c3chart extends DokuWiki_Syntax_Plugin {
         }
         $c3data = implode("", $c3data);
         $chartid = uniqid('__c3chart_');
-        $c3data = '{"bindto": "#'.$chartid.'",'.$c3data.'}';
+        $c3data = base64_encode('{"bindto": "#'.$chartid.'",'.$c3data.'}');
 
         return array($chartid, $c3data);
     }
@@ -75,7 +75,7 @@ class syntax_plugin_c3chart extends DokuWiki_Syntax_Plugin {
         $renderer->doc .= '<div id="'.$chartid.'"></div>';
         $renderer->doc .= <<<EOS
 <script type="text/javascript">/*<![CDATA[*/
-c3.generate(jQuery.parseJSON('$c3data'));
+c3.generate(jsyaml.load(atob('$c3data')));
 /*!]]>*/</script>
 EOS;
         return true;
