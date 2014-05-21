@@ -14,19 +14,19 @@ class syntax_plugin_c3chart extends DokuWiki_Syntax_Plugin {
      * @return string Syntax mode type
      */
     public function getType() {
-        return 'FIXME: container|baseonly|formatting|substition|protected|disabled|paragraphs';
+        return 'substition';
     }
     /**
      * @return string Paragraph type
      */
     public function getPType() {
-        return 'FIXME: normal|block|stack';
+        return 'block';
     }
     /**
      * @return int Sort order - Low numbers go before high numbers
      */
     public function getSort() {
-        return FIXME;
+        return 200;
     }
 
     /**
@@ -35,13 +35,8 @@ class syntax_plugin_c3chart extends DokuWiki_Syntax_Plugin {
      * @param string $mode Parser mode
      */
     public function connectTo($mode) {
-        $this->Lexer->addSpecialPattern('<FIXME>',$mode,'plugin_c3chart');
-//        $this->Lexer->addEntryPattern('<FIXME>',$mode,'plugin_c3chart');
+        $this->Lexer->addSpecialPattern('<c3>.*?</c3>',$mode,'plugin_c3chart');
     }
-
-//    public function postConnect() {
-//        $this->Lexer->addExitPattern('</FIXME>','plugin_c3chart');
-//    }
 
     /**
      * Handle matches of the c3chart syntax
@@ -53,9 +48,16 @@ class syntax_plugin_c3chart extends DokuWiki_Syntax_Plugin {
      * @return array Data for the renderer
      */
     public function handle($match, $state, $pos, Doku_Handler &$handler){
-        $data = array();
+        $match = trim($match);
+        $c3data = explode("\n", substr($match, 4, -5));
+        foreach ($c3data as &$line) {
+            $line = trim($line);
+        }
+        $c3data = implode("", $c3data);
+        $chartid = uniqid('__c3chart_');
+        $c3data = '{"bindto": "#'.$chartid.'",'.$c3data.'}';
 
-        return $data;
+        return array($chartid, $c3data);
     }
 
     /**
@@ -69,6 +71,13 @@ class syntax_plugin_c3chart extends DokuWiki_Syntax_Plugin {
     public function render($mode, Doku_Renderer &$renderer, $data) {
         if($mode != 'xhtml') return false;
 
+        list($chartid, $c3data) = $data;
+        $renderer->doc .= '<div id="'.$chartid.'"></div>';
+        $renderer->doc .= <<<EOS
+<script type="text/javascript">/*<![CDATA[*/
+c3.generate(jQuery.parseJSON('$c3data'));
+/*!]]>*/</script>
+EOS;
         return true;
     }
 }
