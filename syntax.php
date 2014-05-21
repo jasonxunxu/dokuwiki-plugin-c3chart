@@ -75,7 +75,7 @@ class syntax_plugin_c3chart extends DokuWiki_Syntax_Plugin {
         $renderer->doc .= '<div id="'.$chartid.'"></div>';
         $renderer->doc .= <<<EOS
 <script type="text/javascript">/*<![CDATA[*/
-c3.generate(jsyaml.load(atob('$c3data')));
+c3.generate(jsyaml.load(decodeURIComponent(escape(atob('$c3data')))));
 /*!]]>*/</script>
 EOS;
         return true;
