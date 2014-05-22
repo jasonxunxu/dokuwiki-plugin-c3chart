@@ -72,12 +72,7 @@ class syntax_plugin_c3chart extends DokuWiki_Syntax_Plugin {
         if($mode != 'xhtml') return false;
 
         list($chartid, $c3data) = $data;
-        $renderer->doc .= '<div id="'.$chartid.'"></div>';
-        $renderer->doc .= <<<EOS
-<script type="text/javascript">/*<![CDATA[*/
-c3.generate(jsyaml.load(decodeURIComponent(escape(atob('$c3data')))));
-/*!]]>*/</script>
-EOS;
+        $renderer->doc .= '<div id="'.$chartid.'" c3data="'.$c3data.'"></div>';
         return true;
     }
 }
