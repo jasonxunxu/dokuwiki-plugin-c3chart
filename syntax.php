@@ -54,6 +54,7 @@ class syntax_plugin_c3chart extends DokuWiki_Syntax_Plugin {
             $line = trim($line);
         }
         $c3data = implode("", $c3data);
+        if($c3data[0]=='{') $c3data = substr($c3data, 1, -1);
         $chartid = uniqid('__c3chart_');
         $c3data = base64_encode('{"bindto": "#'.$chartid.'",'.$c3data.'}');
 
