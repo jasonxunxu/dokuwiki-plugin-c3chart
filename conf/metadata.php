@@ -6,5 +6,7 @@
  */
 
 
-//$meta['fixme'] = array('string');
-
+$meta['cdn_yaml'] = array('string');
+$meta['cdn_d3'] = array('string');
+$meta['cdn_c3'] = array('string');
+$meta['cdn_c3_css'] = array('string');
