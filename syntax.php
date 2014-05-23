@@ -35,7 +35,7 @@ class syntax_plugin_c3chart extends DokuWiki_Syntax_Plugin {
      * @param string $mode Parser mode
      */
     public function connectTo($mode) {
-        $this->Lexer->addSpecialPattern('<c3>.*?</c3>',$mode,'plugin_c3chart');
+        $this->Lexer->addSpecialPattern('<c3.+?</c3>',$mode,'plugin_c3chart');
     }
 
     /**
@@ -48,8 +48,15 @@ class syntax_plugin_c3chart extends DokuWiki_Syntax_Plugin {
      * @return array Data for the renderer
      */
     public function handle($match, $state, $pos, Doku_Handler &$handler){
-        $match = trim($match);
-        $c3data = explode("\n", substr($match, 4, -5));
+        $match = substr(trim($match), 3, -5);
+        list($opts, $c3data) = explode('>', $match, 2);
+        preg_match_all('/(\\w+)\s*=\\s*([^"\'\\s>]*)/', $opts, $matches, PREG_SET_ORDER);
+        $opts = array();
+        foreach($matches as $m) {
+            $opts[strtolower($m[1])] = $m[2];
+        }
+
+        $c3data = explode("\n", $c3data);
         foreach ($c3data as &$line) {
             $line = trim($line);
         }
@@ -58,7 +65,7 @@ class syntax_plugin_c3chart extends DokuWiki_Syntax_Plugin {
         $chartid = uniqid('__c3chart_');
         $c3data = base64_encode('{"bindto": "#'.$chartid.'",'.$c3data.'}');
 
-        return array($chartid, $c3data);
+        return array($chartid, $c3data, $opts);
     }
 
     /**
@@ -72,8 +79,20 @@ class syntax_plugin_c3chart extends DokuWiki_Syntax_Plugin {
     public function render($mode, Doku_Renderer &$renderer, $data) {
         if($mode != 'xhtml') return false;
 
-        list($chartid, $c3data) = $data;
-        $renderer->doc .= '<div id="'.$chartid.'" c3data="'.$c3data.'"></div>';
+        list($chartid, $c3data, $opts) = $data;
+        $s = '';
+        $c = '';
+        foreach($opts as $n => $v) {
+            if(in_array($n, array('width','height')) && $v) {
+                $s .= $n.':'.hsc($v).';';
+            } elseif($n=='align' && in_array($v, array('left','right','center'))) {
+                $c = 'media'.$v;
+            }
+        }
+        if($s) $s = ' style="'.$s.'"';
+        if($c) $c = ' class="'.$c.'"';
+        $renderer->doc .= '<div id="'.$chartid.'"'.$c.$s.' c3data="'.$c3data.'"></div>'."\n";
+    
         return true;
     }
 }
