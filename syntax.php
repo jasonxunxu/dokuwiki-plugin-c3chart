@@ -95,7 +95,7 @@ class syntax_plugin_c3chart extends DokuWiki_Syntax_Plugin {
         }
         if($s) $s = ' style="'.$s.'"';
         if($c) $c = ' class="'.$c.'"';
-        $renderer->doc .= '<div id="'.$chartid.'"'.$c.$s.' c3data="'.$c3data.'"></div>'."\n";
+        $renderer->doc .= '<div id="'.$chartid.'"'.$c.$s.' data-c3chart="'.$c3data.'"></div>'."\n";
     
         return true;
     }
