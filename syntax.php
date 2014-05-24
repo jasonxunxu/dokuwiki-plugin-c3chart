@@ -51,7 +51,11 @@ class syntax_plugin_c3chart extends DokuWiki_Syntax_Plugin {
         $match = substr(trim($match), 3, -5);
         list($opts, $c3data) = explode('>', $match, 2);
         preg_match_all('/(\\w+)\s*=\\s*([^"\'\\s>]*)/', $opts, $matches, PREG_SET_ORDER);
-        $opts = array();
+        $opts = array(
+            'width' => $this->getConf('width'),
+            'height' => $this->getConf('height'),
+            'align' => $this->getConf('align'),
+        );
         foreach($matches as $m) {
             $opts[strtolower($m[1])] = $m[2];
         }
