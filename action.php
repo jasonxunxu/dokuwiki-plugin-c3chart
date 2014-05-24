@@ -35,23 +35,23 @@ class action_plugin_c3chart extends DokuWiki_Action_Plugin {
     public function handle_tpl_metaheader_output(Doku_Event &$event, $param) {
         $event->data["script"][] = array (
             "type" => "text/javascript",
-            "src" => $this->get_asset('cdn_yaml'),
+            "src" => $this->get_asset('url_yaml'),
             "_data" => "",
         );
         $event->data["script"][] = array (
             "type" => "text/javascript",
-            "src" => $this->get_asset('cdn_d3'),
+            "src" => $this->get_asset('url_d3'),
             "_data" => "",
         );
         $event->data["script"][] = array (
             "type" => "text/javascript",
-            "src" => $this->get_asset('cdn_c3'),
+            "src" => $this->get_asset('url_c3'),
             "_data" => "",
         );
         $event->data["link"][] = array (
             "type" => "text/css",
             "rel" => "stylesheet",
-            "href" => $this->get_asset('cdn_c3_css'),
+            "href" => $this->get_asset('url_c3_css'),
         );
     }
 
