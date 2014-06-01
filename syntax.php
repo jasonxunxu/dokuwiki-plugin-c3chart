@@ -62,10 +62,7 @@ class syntax_plugin_c3chart extends DokuWiki_Syntax_Plugin {
 
         $c3data = preg_replace('#//.*?$#m', '', $c3data); // comment: // foo
         $c3data = explode("\n", $c3data);
-        foreach ($c3data as &$line) {
-            $line = trim($line);
-        }
-        $c3data = implode("", $c3data);
+        $c3data = implode("", array_map(trim, $c3data));
         $c3data = preg_replace('#/\*.*?\*/#', '', $c3data); // comment: /* bar */
         if($c3data[0]=='{') $c3data = substr($c3data, 1, -1);
         $chartid = uniqid('__c3chart_');
