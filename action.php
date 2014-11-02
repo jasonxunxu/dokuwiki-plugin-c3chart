@@ -58,7 +58,8 @@ class action_plugin_c3chart extends DokuWiki_Action_Plugin {
     private function get_asset($asset) {
         $u = $this->getConf($asset);
         if(!preg_match('#^(?:(?:https?:)?/)?/#', $u)) {
-            $u = DOKU_BASE."lib/plugins/".$this->getInfo()['base']."/assets/".$u;
+            $info = $this->getInfo();
+            $u = DOKU_BASE."lib/plugins/".$info['base']."/assets/".$u;
         }
         return $u;
     }
